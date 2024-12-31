@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        meta(name=viewport content='width=device-width, initial-scale=1.0')
+        style @import url('/style.css');
+        title Чат Мичурина, архив
+    body
+        section#chat
+            header #[a#home(href='/michurin/')] #[a#add(href='/michurin/add')]
+            article Редактировать весь чат. Чат прописан в формате JSON, представляет собой массив из объектов с пятью ключами: "d" (date), "t" (time), "c" (color), "n" (nick, сокращение от nickname), "m" (message), — значением которых является строка. (Для новичков: неважно, ставить ли пробелы или переносы строк, они не играют служебной роли и не ломают ничего.)
+            footer
+                form(action='' method='post')
+                    textarea(name='json') #{string}
+                    | <br> Пароль 
+                    input(type='password' name='pass') 
+                    button(type='submit') Сохранить
+        script(src='/script.js')

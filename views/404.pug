@@ -1,0 +1,16 @@
+doctype html
+html
+    head
+        meta(charset='UTF-8')
+        meta(name=viewport content='width=device-width, initial-scale=1.0')
+        style @import url('/style.css');
+        title Чат Мичурина, архив
+    body
+        section#chat
+            header #[a#home(href='/michurin')] #[a#edit(href='/michurin/edit')] #[a#add(href='/michurin/add')]
+            article
+                table
+                    caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
+                    thead: tr: th Ошибка 404
+                    tbody: tr: td Сообщение от сервера: «К сожалению, я не найден. Меня неправильно написали в URL (>_<)».
+        script(src='/script.js')
