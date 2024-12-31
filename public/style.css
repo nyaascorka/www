@@ -1,5 +1,5 @@
 :root {
-    font: 16px/1.25 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font: 14px/1.25 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color-scheme: light dark;
     color: light-dark(#000, #fff);
 }
