@@ -14,25 +14,14 @@ html
                 table
                     caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
 
-                    - let chatModified = [];
-                    - for (let i in chatArchive) {
-                    -     if (i === '0' || chatArchive[i-1].d !== chatArchive[i].d) chatModified.push(chatArchive[i].d);
-                    -     let {t,c,n,m} = chatArchive[i];
-                    -     chatModified.push({t,c,n,m});
-                    - }
-                    - let chatLen = chatModified.length;
+                    - for (let msg of chatArchive)
+                            - let {d, t, c: colorLight, n, m} = msg;
+                            - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
+                            - let colorDark = colorLight.map(c => c + 255-minLight-maxLight);
+                            - colorString = (colorLight[0]) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
 
-                    - for ( let i=0; i < chatLen; )
-                        thead: tr: th(colspan='2') #{chatModified[i]}
-                        - i++;
-                        tbody
-                            - for ( ; typeof(chatModified[i]) === 'object'; )
-                                - let {t, c: colorLight, n, m} = chatModified[i];
-                                - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
-                                - let colorDark = colorLight.map(c => c + 255-minLight-maxLight);
-                                - colorString = (colorLight[0]) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
-                                tr(style=colorString)
-                                    th #[p.time #{t}] #[p.nick #{n}]
-                                    td #{m}
-                                - i++;
+                            tr(style=colorString)
+                                th.datetime #[span.date #{d}] #[span.time #{t}]
+                                th.nick #{n}
+                                td.message #{m}
         script(src='/script.js')
