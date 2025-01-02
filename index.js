@@ -60,7 +60,7 @@ APP.use((_, res) => res.render('404'));
 var API = async () => {
     {
         /* Мичурин (новые сверху) */
-        var browser = await chromium.launch({headless: true});
+        var browser = await chromium.launch({headless: !true});
         var page = await browser.newPage();
 
         await page.goto('http://nono.michurin.net/chat');
@@ -131,4 +131,4 @@ var API = async () => {
     }
 };
 
-setInterval(() => API(), 3600_000);
+API(); setInterval(() => API(), 3600_000);
