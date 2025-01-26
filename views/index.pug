@@ -6,22 +6,34 @@ html
         style @import url('/style.css');
         title Чат Мичурина, архив
     body
-        section#chat
+        article#chat
             - if (!isPassCorrect)
-                header Пароль неверный
-            header #[a#edit(href='/michurin/edit')] #[a#add(href='/michurin/add')]
-            article
-                table
-                    caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
+                nav Пароль неверный
+            nav
+                a#edit(href='/michurin/edit')
+                a#add(href='/michurin/add')
+                div#timeformat
+                    label: input(type="checkbox")
+                    div
+                        label #[input(type='radio' name='timeformat' checked)] UNIX
+                        label #[input(type='radio' name='timeformat')] YYYY/MM/DD
+            table
+                caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
+                thead <!-- Невидимый элемент для сематники -->
+                    tr #[th Дата и время] #[th Никнейм] #[th Сообщение]
+                - for (let msg of chatArchive)
+                    - let {d, t, c: colorLight, n, m, class: cls} = msg;
+                    - if (colorLight !== undefined)
+                        - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
+                        - let colorDark = colorLight.map(c => c + 255-minLight-maxLight);
+                        - colorString = (colorLight[0]) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
 
-                    - for (let msg of chatArchive)
-                            - let {d, t, c: colorLight, n, m} = msg;
-                            - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
-                            - let colorDark = colorLight.map(c => c + 255-minLight-maxLight);
-                            - colorString = (colorLight[0]) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
+                    tr(class=cls style=colorString)
+                        - if (d !== undefined)
+                            td.dt.def #{d+t}
+                        - else
+                            td.dt Неизвестная дата + #{t}
+                        td.n #{n}
+                        td.m #{m}
 
-                            tr(style=colorString)
-                                th.datetime #[span.date #{d}] #[span.time #{t}]
-                                th.nick #{n}
-                                td.message #{m}
         script(src='/script.js')

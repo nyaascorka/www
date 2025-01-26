@@ -6,10 +6,10 @@ html
         style @import url('/style.css');
         title Чат Мичурина, архив
     body
-        section#chat
-            header #[a#home(href='/michurin/')] #[a#add(href='/michurin/add')]
-            article Редактировать весь чат. Чат прописан в формате JSON, представляет собой массив из объектов с пятью ключами: "d" (date), "t" (time), "c" (color), "n" (nick, сокращение от nickname), "m" (message), — значением которых является строка. (Для новичков: неважно, ставить ли пробелы или переносы строк, они не играют служебной роли и не ломают ничего.)
-            footer
+        article#chat
+            nav #[a#home(href='/michurin/')] #[a#add(href='/michurin/add')]
+            | Редактировать весь чат. Чат прописан в формате JSON, представляет собой массив из объектов с пятью ключами: "d" (date), "t" (time), "c" (color), "n" (nick, сокращение от nickname), "m" (message), — значением которых является строка. (Для новичков: неважно, ставить ли пробелы или переносы строк, они не играют служебной роли и не ломают ничего.)
+            nav
                 form(action='' method='post')
                     textarea(name='json') #{string}
                     | <br> Пароль 

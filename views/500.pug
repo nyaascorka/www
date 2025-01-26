@@ -6,11 +6,10 @@ html
         style @import url('/style.css');
         title Чат Мичурина, архив
     body
-        section#chat
+        article#chat
             header #[a#edit(href='/michurin/edit')] #[a#add(href='/michurin/add')]
-            article
-                table
-                    caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
-                    thead: tr: th Ошибка 500
-                    tbody: tr: td Сообщение от сервера: «Я упал. Чтобы меня вернуть, исправьте, пожалуйста, синтаксические ошибки в JSON».
+            table
+                caption Архив #[a(href='http://nono.michurin.net/chat') чата Мичурина]
+                thead: tr: th Ошибка 500
+                tbody: tr: td Сообщение от сервера: «Я упал. Чтобы меня вернуть, исправьте, пожалуйста, синтаксические ошибки в JSON».
         script(src='/script.js')

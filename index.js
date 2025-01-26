@@ -7,7 +7,7 @@ const {chromium} = require('playwright');
 */
 
 var APP = express();
-var PORT = 443;
+var PORT = 3000;
 APP.listen(PORT, () => console.log(`Прослушка порта ${PORT}`));
 APP.set('views', 'views');
 APP.set('view engine', 'pug');
@@ -24,7 +24,7 @@ var chatArchive = {
         edit(input) {fs.writeFileSync(this.name, input);},
         add(input) {
             var resJSON = ( input ).concat( this.JSONAndErr.JSON );
-            fs.writeFileSync(this.name, JSON.stringify(resJSON));
+            fs.writeFileSync(this.name, JSON.stringify(resJSON, null, 2));
         }
     },
     pass = '1234567890';
@@ -60,18 +60,20 @@ APP.use((_, res) => res.render('404'));
 var API = async () => {
     {
         /* Мичурин (новые сверху) */
-        var browser = await chromium.launch({headless: !true});
+        var browser = await chromium.launch({headless: true});
         var page = await browser.newPage();
 
         await page.goto('http://nono.michurin.net/chat');
         await page.waitForSelector('#wall > div');
-        var currentTime = new Date(); // Понадобится в 4-м смысловом блоке (ниже)
+        var currentMs = new Date(); // Понадобится в 4-м смысловом блоке (ниже)
         var chatMichurin = await page.evaluate( () =>
             [...document.querySelectorAll('#wall > div > span')].toReversed().map( e => {
-                var [n,m] = e.childNodes[1].textContent.split(/(?<!: .*): /);
+                var [t,n_m] = e.childNodes;
+                t = t.innerHTML.match(/\d\d/g);
+                var [n,m] = n_m.textContent.split(/(?<!: .*): /);
                 var c = e.style.color.match(/\d{1,3}/g).map(rgb => +rgb);
-                if (c[0] + c[1] + c[2] === 0) c = [];
-                return {t: e.childNodes[0].innerHTML.slice(1,6), c, n, m};
+                if (c[0]+c[1]+c[2] === 0) c = [];
+                return {t: 3600*((+t[0]+21) % 24) + 60*t[1], c, n, m};
             } )
         );
         console.log('0)');
@@ -93,7 +95,7 @@ var API = async () => {
             lastIndexArchive = 0;
             console.log('2)');
             console.log(lastTimeArchive, lastIndexArchive);
-        for (let i=1; lastTimeArchive === chatArchive.JSONAndErr.JSON[i].t; lastIndexArchive = ++i) {
+        for (let i=0; lastTimeArchive === chatArchive.JSONAndErr.JSON[i].t; lastIndexArchive = i++) {
             console.log('2)');
             console.log(chatArchive.JSONAndErr.JSON[i].t);}
 
@@ -101,7 +103,7 @@ var API = async () => {
         var lastIndexMichurin = chatMichurin.map(msg => msg.t).indexOf(lastTimeArchive);
             console.log('3)');
             console.log(lastIndexMichurin);
-        for (let i=1; lastTimeArchive === chatMichurin.at(i).t; lastIndexMichurin = ++i) {
+        for (let i=0; lastTimeArchive === chatMichurin.at(i).t; lastIndexMichurin = i++) {
             console.log('3)');
             console.log(chatMichurin.at(i).t);}
 
@@ -114,16 +116,10 @@ var API = async () => {
     }
     if (chatForAPI.length) {
         /* Вставить дату */
-        var today = new Date(currentTime - - 3*3600*1000),
-            yesterday = new Date(currentTime - 21*3600*1000),
-            todayD = [today.getFullYear(), today.getMonth()+1, today.getDate()].join('/'),
-            yesterdayD = [yesterday.getFullYear(), yesterday.getMonth()+1, yesterday.getDate()].join('/'),
-            todayT = [
-                `${(yesterday.getHours() < 10) ? '0' : ''}${yesterday.getHours()}`,
-                `${(yesterday.getMinutes() < 10) ? '0' : ''}${yesterday.getMinutes()}`
-            ].join(':');
-        var initialDate = (chatForAPI[0].t < todayT) ? todayD : yesterdayD;
-        for (let msg of chatForAPI) msg.d = (msg.t <= todayT) ? todayD : yesterdayD;
+        var currentS = (currentMs - currentMs % 1000)/1000,
+            todayT = currentS % 86400,
+            todayD = currentS - todayT;
+        for (let msg of chatForAPI) msg.d = todayD - (msg.t > todayT) * 86400;
     }
     if (chatForAPI.length) {
         /* API */
@@ -131,4 +127,4 @@ var API = async () => {
     }
 };
 
-API(); setInterval(() => API(), 3600_000);
+API(); setInterval(() => API(), 36_000_000);
