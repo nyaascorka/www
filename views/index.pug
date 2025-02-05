@@ -22,7 +22,6 @@ html
                 thead <!-- Невидимый элемент для сематники -->
                     tr #[th Дата и время] #[th Никнейм] #[th Сообщение]
                 - for (let msg of chatArchive)
-                    - console.log(msg);
                     - let {d, t, c: colorLight, n, m, class: cls} = msg;
                     - if (colorLight !== undefined)
                         - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
