@@ -97,13 +97,13 @@ var API = async () => {
             console.log(lastTimeArchive, lastIndexArchive);
         for (let i=0; lastTimeArchive === chatArchive.JSONAndErr.JSON[i].t; lastIndexArchive = i++) {
             console.log('2)');
-            console.log(chatArchive.JSONAndErr.JSON[i].t);}
+            console.log(chatArchive.JSONAndErr.JSON[i].t, i);}
 
         // Где оно последним есть у Мичурина и сколько повторяется вверх подряд хотя бы по модулю в сутки
         var lastIndexMichurin = chatMichurin.map(msg => msg.t).indexOf(lastTimeArchive);
             console.log('3)');
             console.log(lastIndexMichurin);
-        for (let i=0; lastTimeArchive === chatMichurin.at(i).t; lastIndexMichurin = i++) {
+        for (let i=lastIndexMichurin; lastTimeArchive === chatMichurin.at(i).t; lastIndexMichurin = i++) {
             console.log('3)');
             console.log(chatMichurin.at(i).t);}
 

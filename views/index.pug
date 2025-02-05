@@ -22,11 +22,12 @@ html
                 thead <!-- Невидимый элемент для сематники -->
                     tr #[th Дата и время] #[th Никнейм] #[th Сообщение]
                 - for (let msg of chatArchive)
+                    - console.log(msg);
                     - let {d, t, c: colorLight, n, m, class: cls} = msg;
                     - if (colorLight !== undefined)
                         - let minLight = Math.min(...colorLight), maxLight = Math.max(...colorLight);
                         - let colorDark = colorLight.map(c => c + 255-minLight-maxLight);
-                        - colorString = (colorLight[0]) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
+                        - colorString = (maxLight) ? `color: light-dark(rgb(${colorLight.join(',')}), rgb(${colorDark.join(',')}))` : '';
 
                     tr(class=cls style=colorString)
                         - if (d !== undefined)
