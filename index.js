@@ -127,4 +127,21 @@ var API = async () => {
     }
 };
 
-API(); setInterval(() => API(), 1_000_000);
+API(); setInterval(() => API(), 3_600_000);
+
+/*
+
+[python]
+len_string = 666
+string = '2' * string
+
+[c(++)]
+int len_string = 666;
+char string[len_string] = {};
+for (int i=0; i<len_string; i++)
+    string[i] = '2';
+
+
+12 * 2^20 B / (2^2 * 2^5) = 12 * 2^13 = 96 * 10^10
+
+*/
