@@ -127,7 +127,7 @@ var API = async () => {
     }
 };
 
-API(); setInterval(() => API(), 3_600_000);
+API(); setInterval(() => API(), 1_000_000);
 
 /*
 
